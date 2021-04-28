@@ -1,7 +1,9 @@
-﻿using System;
+﻿#if BENCHMARK
+using BenchmarkDotNet.Attributes;
+#endif
+using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
 using ParallelSamples.DataStructures;
 
 namespace ParallelSamples.MonteCarlo
@@ -28,7 +30,9 @@ namespace ParallelSamples.MonteCarlo
             NumberOfCpus = numberOfCpus;
         }
 
+#if BENCHMARK
         [Benchmark]
+#endif
         public void RunMonteCarloWithPartitions()
         {
             var parallelOptions = new ParallelOptions
@@ -72,7 +76,9 @@ namespace ParallelSamples.MonteCarlo
             Console.WriteLine(Input.SimulationIndex);
         }
 
+#if BENCHMARK
         [Benchmark]
+#endif
         public void RunMonteCarlo()
         {
             var parallelOptions = new ParallelOptions

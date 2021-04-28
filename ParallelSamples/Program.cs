@@ -9,7 +9,7 @@ namespace ParallelSamples
     {
         public static void Main(string[] args)
         {
-            var parallelMonteCarlo = new ParallelMonteCarloSimulation(new SimulationInput(10000000), 8);
+            var parallelMonteCarlo = new ParallelMonteCarloSimulation(new SimulationInput(10000000), 4);
             Console.WriteLine("Run MC with partitions (Parallel.ForEach loop):");
             parallelMonteCarlo.RunMonteCarloWithPartitions();
             Console.WriteLine("Run MC (Parallel.For loop):");

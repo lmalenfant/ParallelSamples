@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿#if BENCHMARK
+using BenchmarkDotNet.Attributes;
+#endif
 using ParallelSamples.DataStructures;
 using System.Threading;
 
@@ -22,7 +24,9 @@ namespace ParallelSamples.MonteCarlo
             Rng = rng;
         }
 
+#if BENCHMARK
         [Benchmark]
+#endif
         public SimulationOutput Run()
         {
             Results = new SimulationOutput(Input);
