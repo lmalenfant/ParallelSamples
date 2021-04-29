@@ -72,8 +72,8 @@ namespace ParallelSamples.MonteCarlo
                         Console.WriteLine(e.Message);
                     }
                 });
-            Console.WriteLine(simulationOutputs.Count);
-            Console.WriteLine(Input.SimulationIndex);
+            Console.WriteLine($"Values in SimulationOutput: {simulationOutputs.Count}");
+            Console.WriteLine($"Original index: {Input.SimulationIndex}");
         }
 
 #if BENCHMARK
@@ -86,9 +86,8 @@ namespace ParallelSamples.MonteCarlo
                 MaxDegreeOfParallelism = NumberOfCpus
             };
             var simulationOutputs = new ConcurrentBag<SimulationOutput>();
-            var simulationInputs = new ConcurrentQueue<SimulationInput>();
-            simulationInputs.Enqueue(Input);
-            Parallel.For<MonteCarloSimulation>(0, parallelOptions.MaxDegreeOfParallelism, parallelOptions, () => simulationInputs.TryPeek(out var input) ? new MonteCarloSimulation(input) : new MonteCarloSimulation(),
+
+            Parallel.For<MonteCarloSimulation>(0, parallelOptions.MaxDegreeOfParallelism, parallelOptions, () => new MonteCarloSimulation(Input, 10),
                 (index, parallelLoopState, monteCarloSimulation) =>
                 {
                     try
@@ -116,7 +115,8 @@ namespace ParallelSamples.MonteCarlo
                         Console.WriteLine(e.Message);
                     }
                 });
-            Console.WriteLine(Input.SimulationIndex);
+            Console.WriteLine($"Values in SimulationOutput: {simulationOutputs.Count}");
+            Console.WriteLine($"Original index: {Input.SimulationIndex}");
         }
     }
 }
