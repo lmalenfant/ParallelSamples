@@ -43,7 +43,7 @@ namespace ParallelSamples.MonteCarlo
 
             var photonsPerCpu = Input.N / NumberOfCpus;
             var partition = Partitioner.Create(0, Input.N, photonsPerCpu);
-            Parallel.ForEach<Tuple<long, long>, MonteCarloSimulation>(partition, parallelOptions, () => new MonteCarloSimulation(Input),
+            Parallel.ForEach<Tuple<long, long>, MonteCarloSimulation>(partition, parallelOptions, () => new MonteCarloSimulation(Input.Duplicate()),
                 (tSource, parallelLoopState, partitionIndex, monteCarloSimulation) =>
                 {
                     try
@@ -52,7 +52,7 @@ namespace ParallelSamples.MonteCarlo
                         monteCarloSimulation.Rng = new Random(5).Next();
                         monteCarloSimulation.Input.SimulationIndex = (int)partitionIndex;
                         var (item1, item2) = tSource;
-                        Console.WriteLine($"Partition({partitionIndex}) is processing {item1} to {item2} - id:{Task.CurrentId}");
+                        Console.WriteLine($"Partition({partitionIndex}) is processing {item1} to {item2} - id:{Task.CurrentId} Photons: {monteCarloSimulation.Input.N}");
                         monteCarloSimulation.Run();
                         return monteCarloSimulation;
                     }
@@ -87,7 +87,7 @@ namespace ParallelSamples.MonteCarlo
             };
             var simulationOutputs = new ConcurrentBag<SimulationOutput>();
 
-            Parallel.For<MonteCarloSimulation>(0, parallelOptions.MaxDegreeOfParallelism, parallelOptions, () => new MonteCarloSimulation(Input, 10),
+            Parallel.For<MonteCarloSimulation>(0, parallelOptions.MaxDegreeOfParallelism, parallelOptions, () => new MonteCarloSimulation(Input.Duplicate(), 10),
                 (index, parallelLoopState, monteCarloSimulation) =>
                 {
                     try

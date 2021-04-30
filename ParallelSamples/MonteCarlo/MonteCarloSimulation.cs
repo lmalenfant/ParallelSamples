@@ -20,7 +20,7 @@ namespace ParallelSamples.MonteCarlo
 
         public MonteCarloSimulation(SimulationInput input, int rng)
         {
-            Input = input.Duplicate();
+            Input = input;
             Rng = rng;
         }
 
